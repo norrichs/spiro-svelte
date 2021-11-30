@@ -35,8 +35,10 @@
 </script>
 
 <svg class="ring" width={width} height={height}>
-	<path  d={dString} fill="none" stroke-linejoin="round"/>
-	<circle cx={center[0]} cy={center[1]} r=4 fill="none" stroke="black"/>
+	<!-- <circle cX={center[0]} cY={center[1]} r={center[1] } fill="blue" fill-rule="evenodd" /> -->
+	<path  d={dString + "m-12.5 -24 a1 1 0 0 0 0 " + (r * 2 + 60) + " a1 1 0 0 0 0 -" + (r * 2 + 60)}  stroke-linejoin="round">
+	</path>
+	<path d={`M${center[0]-10} ${center[1]} L${center[0]+10} ${center[1]} M${center[0]} ${center[1]-10} L${center[0]} ${center[1]+10} `} stroke-width=".5"/>
 </svg>
 
 
@@ -45,13 +47,15 @@
 		margin: 0;
 	}
 	.ring{
-		background-color: transparent;
 		margin-bottom: -3px;
 		position: relative;
-		/* fill: none; */
-		stroke: black;
-		stroke-width: 1;
+		fill: rgba(200,200,150,0.5);
+		
+		stroke: rgba(200,200,150,0.8);
+		stroke-width: 2;
 		stroke-linejoin: "round";
+		overflow: visible;
+
 	}
 
 

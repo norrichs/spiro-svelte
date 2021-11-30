@@ -8,9 +8,8 @@
 	let step = 1;
 
 
-	const calcSpiro = (rT, gT, r, pen, step) => {
+	const calcSpiro = (rT, gT, r, pen, step, center) => {
 		const p = pen
-		const center = [r,r]
 		let spiro = []
 		const gRad = r * gT / rT  	// radius of gear
 		const rRad = r - gRad			// radius from center of ring to center of gear
@@ -47,13 +46,13 @@
 	let s = sParams.toothSize;
 	let width = sParams.radius * 2 + s * 2;
 	let height = sParams.radius * 2 + s * 2;
-	let center = [0,0]//[width / 2, height / 2];
+	let center = [width / 2, height / 2]//[width / 2, height / 2];
 	// let points = new Array(t * 2 + 1)
 	// points.fill(0)
 
 	// console.log('last point', pointArray[pointArray.length])
 
-	const pointArray = calcSpiro(rParams.t, gParams.t, sParams.radius, gParams.p, step)
+	const pointArray = calcSpiro(rParams.t, gParams.t, sParams.radius, gParams.p, step, center)
 	let lines = pointArray.map((p) => {
 		return `L${p[0]} ${p[1]} `;
 	});
@@ -78,12 +77,14 @@
 
 <svg class="spirograph" width={width} height={height}>
 	<path d={dString} />
+	<path d={`M${center[0]-10} ${center[1]} L${center[0]+10} ${center[1]} M${center[0]} ${center[1]-10} L${center[0]} ${center[1]+10} `} stroke-width="2"/>
 </svg>
 
 <style>
 	.spirograph {
 		position: absolute;
 		top: 0;
+		left: 0;
 		fill: none;
 		stroke: red;
 		stroke-width: 5;

@@ -12,6 +12,7 @@
 	let height = width;
 	let center = [width / 2, height / 2];
 	let points = new Array(t * 2)
+	let gearHidden = false;
 	
 	points.fill(0)
 	
@@ -37,16 +38,18 @@
 </script>
 
 
-	<svg  class="gear" width={width} height={height} style={"--gear-rotation: " + gearRotation + "deg;"}>
+	<svg  class="gear" class:hidden={gearHidden} width={width} height={height} style={"--gear-rotation: " + gearRotation + "deg;"}>
 		<path class="outergear" d={dString}  stroke-linejoin="round"/>
 		<!-- <circle cx={center[0]} cy={center[1]} r=2 fill="none" stroke="black" /> -->
-		<circle cx={center[0]} cy={center[1] - r * p} r=2  stroke="black"/>
+		<circle cx={center[0]} cy={center[1] - r * p} r=6  stroke="black"/>
+		<path d={`M${center[0]-10} ${center[1]} L${center[0]+10} ${center[1]} M${center[0]} ${center[1]-10} L${center[0]} ${center[1]+10} `} stroke-width="1"/>
+
 	</svg>
 
 
 <style>
 	.gear{
-
+		/* background-color: rgba(35,100,120,0.2); */
 		margin-bottom: -3px;
 		fill: rgba(40, 100, 50, 0.3);
 		stroke:rgba(8, 87, 21, 0.3);
@@ -58,6 +61,12 @@
 	}
 	.gear:hover{
 		fill: rgba(40, 100, 50, .7);
+	}
+	.gear:hover circle{
+		fill: rgba(255, 0, 0, 0.3);
+	}
+	.gearHidden{
+		visibility: hidden;
 	}
 	.outergear{
 		/* stroke: none; */
