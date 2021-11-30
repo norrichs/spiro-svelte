@@ -252,13 +252,16 @@
 		box-shadow: 0 0 5px -1px black;
 		width: calc(350px);
 		border-radius:0.5em;
-		padding: 0.5em;
-		padding-left: 20px;
+		padding: 0 1.5em;
+		/* padding-left: 20px; */
+		background-color: rgba(255,255,255,0.1);
+		backdrop-filter: blur(0px);
 		transition: 500ms;
 	}
 	.controls:hover{
-		transform: translateX(370px);
-		transition: 500ms;
+		backdrop-filter: blur(10px);
+		transform: translateX(380px);
+		transition: backdrop-filter 1000ms ease-out 1s, transform 500ms;
 	}
 	.controls>input{
 		width: 75%;
