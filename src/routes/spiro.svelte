@@ -15,7 +15,13 @@
 	//		Drawing algo:
 	//			calculate which section gear currently is in (n)
 	//			display 0 -> n-1
-	//			append "drawing" point with postion of drawing_point and drawing_handle = drawing_point - tangent line * strength * fraction of section length
+	//			appd "drawing" point with postion of drawing_point and drawing_handle = drawing_point - tangent line * strength * fraction of section length
+	
+	
+	// TODO force update of parameters on change
+
+	
+	
 	import { browser, dev } from '$app/env';
 
 	// we don't need any JS on this page, though we'll load
@@ -34,45 +40,43 @@
 	import Gear from '../lib/Gear.svelte';
 	import SpiroGraph from '../lib/SpiroGraph.svelte';
 	import { onMount } from 'svelte';
-	let ringTeeth = 50;
-	let gearTeeth = 26;
-	let radius = 200;
-	let pen = 0.7;
-	let circumference = 2 * Math.PI * radius;
-	let toothArcLength = circumference / ringTeeth;
-	let toothSize = toothArcLength / 2;
-	let width = radius * 2 + toothSize * 2;
-	let height = radius * 2 + toothSize * 2;
+	let rT = 60;
+	let gT = 34;
+	let radius = 300;
+	let p = 0.7;
+	let rim = 30;
+	let toothArcLength = 2 * Math.PI * radius / rT;
+	let toothSize =  Math.PI * radius / rT ;
+	let width = 2 * (radius+rim) // * 2 + toothSize * 2;
+	let height = 2 * (radius+rim) //radius * 2 + toothSize * 2;
 	let center = [width / 2, height / 2];
-	let pointArray = [
-		[1, 1],
-		[10, 10],
-		[10, 25]
-	];
+	let gWidth, gHeight, gCenter, gRadius, rRadius
+	let gRotOffset = 0 
 
-	let gParams = {
-		t: gearTeeth,
-		p: pen
-	};
-	let rParams = {
-		t: ringTeeth
-	};
+	$: setParams(radius, rT, gT, rim, p)
 
-	let sParams = {
-		radius: radius,
-		toothArcLength: toothArcLength,
-		toothSize: toothSize
-	};
+
+	const setParams = (radius, rT, gT) => {
+		// console.log('set params', rT,gT)
+		gWidth = 2 * radius * gT/rT
+		gHeight = gWidth
+		gCenter = [gWidth / 2, gHeight / 2]
+		gRadius = radius * gT / rT;
+		rRadius = radius;
+		gRotOffset = ((rT - gT) % 2) * 360 / gT / 2
+		gRot = (ringA * rT) / gT - ringA + gRotOffset;
+		gX = (rRadius - gRadius) * Math.sin(ringA / r2d);
+		gY = (rRadius - gRadius) * Math.cos(ringA / r2d);
+		// console.log('gRadius, rRadius',gRadius, rRadius)
+		ringA = 0;
+	}
 
 	const r2d = 180 / Math.PI;
 	let gRot = 0;
 	let gAngle = 0.0; // radians
-	let gRadius = (gearTeeth * toothArcLength) / Math.PI / 2;
-	let rRadius = (ringTeeth * toothArcLength) / Math.PI / 2;
-	let gCenter = [gRadius + toothSize / 2, gRadius + toothSize / 2];
 
-	let gX; //= (rRadius - gRadius) * Math.sin(gAngle / r2d) + ringRect.y
-	let gY; //= (rRadius - gRadius) * Math.cos(gAngle / r2d) + ringRect.x
+	let gX; 
+	let gY; 
 	let ringX, ringY;
 	let ringA = 0;
 	let newRingA = 0;
@@ -85,36 +89,6 @@
 		movingGear = true;
 		console.log('ringRect', ringRect);
 	};
-	const calcSpiro = (rT, gT, r, p) => {
-		const center = [r, r];
-		let spiro = [];
-		const gRad = ((r * gT) / rT) * p;
-		const rRad = r - gRad;
-		const d2r = Math.PI / 180;
-		let rA = 0;
-		let gA = 0;
-
-		let i = 0;
-		const step = 1;
-		let gX, gY, pX, pY;
-
-		while (i < 10000) {
-			rA = i * step;
-			gA = (rA * gT) / rT;
-
-			// gX = center[0] + rRad * Math.sin(rA * d2r)
-			// gY = center[1] + rRad * Math.cos(rA * d2r)
-			spiro[i] = [
-				center[0] + rRad * Math.sin(rA * d2r) + gRad * Math.sin(gA * d2r) * pen,
-				center[1] + rRad * Math.cos(rA * d2r) + gRad * Math.cos(gA * d2r) * pen
-			];
-			i++;
-		}
-		console.log('spiro size ', i);
-		return spiro;
-	};
-
-	// const spiro = calcSpiro(ringTeeth, gearTeeth, radius, pen)
 
 	const handleGearMousemove = (ev) => {
 		// console.log('ring mousemove', ev)
@@ -136,29 +110,26 @@
 
 			ringA += ringDeltaA;
 
-			gRot = (ringA * ringTeeth) / gearTeeth - ringA;
-			// gX = (rRadius - gRadius) * Math.sin(ringA / r2d) + ringRect.x - 50;
-			// gY = (rRadius - gRadius) * Math.cos(ringA / r2d) + ringRect.y - 50;
+			gRot = (ringA * rT) / gT - ringA;
 			gX = (rRadius - gRadius) * Math.sin(ringA / r2d);
 			gY = (rRadius - gRadius) * Math.cos(ringA / r2d);
+			// console.log('g, r', gRadius, rRadius, gX, gY)
 
-			// drawSpiroPoint(gX, gY, gRot, radius * gearTeeth / ringTeeth * pen)
 		}
 	};
-	// const drawSpiroPoint = (x, y, a, r) => {
-	// 	// console.log('draw', x, y, a, r)
-	// 	pointArray.push([
-	// 		x + r * Math.sin(a),
-	// 		y + r * Math.sin(a)
-	// 	])
-	// 	pointArray = pointArray
-	// 	console.log(pointArray)
-	// }
+
+	const handleReset=()=>{
+		rT = rT
+		gT = gT
+		radius = radius
+		p = p
+
+	}
 	const setRingRect = () => {
 		// movingGear = true
 		ringRect = document.querySelector('.ring').getBoundingClientRect();
-		gX = (rRadius - gRadius) * Math.sin(gAngle / r2d); //+ ringRect.y
-		gY = (rRadius - gRadius) * Math.cos(gAngle / r2d); //+ ringRect.x
+		gX = (rRadius - gRadius) * Math.sin(gAngle / r2d); 
+		gY = (rRadius - gRadius) * Math.cos(gAngle / r2d); 
 	};
 </script>
 
@@ -166,22 +137,19 @@
 	<title>Spiro</title>
 </svelte:head>
 
-<section class="spiro">
+<section class="spiro" style={ 'width: '+(2 * (radius + rim))+'px; height: '+(2 * (radius + rim)) + 'px;'}>
 	<div class="graph-container">
-		<SpiroGraph {rParams} {gParams} {sParams} {ringA} />
+		<SpiroGraph {toothSize} {rT} {gT} {p} {radius} {ringA} {rim}/>
 	</div>
 	<div class="ring-container" 
 		style={'--container-width:' + width + 'px;'} 
 		use:setRingRect
 	>
-		<Ring {sParams} {rParams} />
+		<Ring {rT} {radius} {rim} />
 	</div>
 
 	<div class="gear-container"
-		style={
-		'left: ' + (0) + 'px;' + 
-			'top: ' + (0)+ 'px;' +
-			'transform: translateX('+ (212.5 - 161 + gX) + 'px) translateY(' + (212.5 - 161 + gY) + 'px);'}
+		style={	'transform: translateX('+ (radius + rim - gCenter[0] + gX) + 'px) translateY(' + (radius+rim - gCenter[1] + gY) + 'px);'}
 		on:mousemove={(ev) => handleGearMousemove(ev)}
 		on:mousedown={(ev) => {
 			handleGearMousedown(ev);
@@ -191,53 +159,69 @@
 		}}
 		use:setRingRect
 	>
-		<Gear {sParams} {gParams} gearRotation={gRot} />
+		<Gear {gT} {rT} {p} {radius} {gRot} />
 	</div>
 </section>
 <section>
 	<div class="controls">
 		<input type="checkbox" /><span>show gear</span> <br>
-		<input type="range" bind:value={ringTeeth} min=50 max=500/> RingTeeth {ringTeeth} <br>
+		<input type="range" bind:value={rT} min={gT} max=500/> rT {rT} <br>
+		<input type="range" bind:value={gT} min=10 max={rT}/> gT {gT} <br>
+		<input type="range" bind:value={radius} min=50 max=500/> radius {radius} <br>
+		<input type="range" bind:value={rim} min=0 max=200/> rim {rim} <br>
+		<button on:click={handleReset}>Re-set</button>
 		<div class="readout">
 			ringX, ringY ({parseInt(ringX)}, {parseInt(ringY)}) <br />
 			gRot = {Math.round(gRot * 100) / 100} <br />
 			ringA = {Math.round(ringA * 100) / 100} <br />
 			gDeltaRot = {Math.round(gDeltaRot * 100) / 100} <br />
 			newRingA = {Math.round(newRingA * 100) / 100} <br />
-	
 			ringDeltaA = {Math.round(ringDeltaA * 100) / 100}
 		</div>
 	</div>
 </section>
 
 <style>
-	.spiro {
-		/* background-color: rgba(0,100,200,0.1); */
+	.test{
+		width: 100px;
+		height: 100px;
+		background-color: red;
+	}
+	.test:hover{
+		background-color: brown;
+		cursor: none;
+		transition: 2000ms;
+	}
+	section.spiro {
+		/* background-color: rgba(0,100,200,0.3); */
 		/* border: 10px solid black; */
-		width: var(--container-width);
-		margin: 0 auto 150px 0;
+		/* width: var(--container-width); */
+		margin:0 0 0 50px;;
+		padding: 0;
 		position: relative;
 	}
 	.graph-container {
 		transform-origin: center center;
-		/* position: absolute; */
+		position: absolute;
 		top: 0;
 		left: 0;
-		/* background-color: rgba(0,100,0,0.1); */
+		background-color: rgba(0,100,0,0.2);
 		/* transform: translate( 24px, 24px); */
 	}
 	.ring-container {
 		/* position: absolute; */
-		top: 0;
-		left: 0;
+		/* top: 50%;
+		left: 50%; */
 		/* box-sizing: border-box; */
-		/* background-color: rgba(100,0,0,0.1);  */
+		/* background-color: rgba(255,0,0,0.1);  */
 		width: var(--container-width);
 		padding: 0;
 	}
 	.gear-container {
 		position: absolute;
 		transform-origin: center center;
+		top: 0;
+		left: 0;
 		/* border-radius: 50%; */
 		/* background-color: rgba(168, 123, 7, 0.336); */
 		box-sizing: border-box;
@@ -247,7 +231,7 @@
 	}
 	.controls{
 		position: absolute;
-		bottom: 100px;
+		bottom: 50%;
 		left: -370px;
 		box-shadow: 0 0 5px -1px black;
 		width: calc(350px);
