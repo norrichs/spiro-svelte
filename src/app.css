@@ -30,11 +30,12 @@ body {
 
 body::before {
 	content: '';
-	width: 80vw;
+	width: 100vw;
 	height: 100vh;
 	position: absolute;
+	border: 1px solid black;
 	top: 0;
-	left: 10vw;
+	/* left: 10vw; */
 	z-index: -1;
 	background: radial-gradient(
 		50% 50% at 50% 50%,

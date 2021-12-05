@@ -1,21 +1,29 @@
 <script>
+
 	export let rT
 	export let radius
 	export let rim
+	export let setRingRect
 
 	console.log('ring teeth', rT)
 	let points, lines, dString, r, s, width, height, center
 	let rW = 12.5
 	$: setRing(rT, rim, radius)
+	let firstTime = true;
 	
 	const setRing = (rT, rim, radius) => {
-		console.log('run setRing')
+		console.log('run setRing. firstTime? ', firstTime)
+		if(!firstTime){
+			console.log('subsequent ringRect')
+			setRingRect()
+			firstTime = false;
+		}
 		r = radius
 		s = Math.PI * r / rT;
 		width = r * 2 + rim * 2
 		height = r * 2 + rim * 2
 		
-		console.log('ring width', width / 2)
+		// console.log('ring width', width / 2)
 		center = [width / 2, height / 2];
 		points = new Array(rT  * 2 + 1)
 		points.fill(0)
@@ -35,6 +43,7 @@
 				return `L${point[0]} ${point[1]}`
 			})
 		dString = `M${points[0][0]} ${points[0][1]} ${lines.join(' ')}`
+
 	}
 
 </script>

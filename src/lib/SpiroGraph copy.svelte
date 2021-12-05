@@ -22,7 +22,7 @@
 		maxStepNum = stepNum;
 		width = radius * 2 + rim * 2 ;
 		height = radius * 2 + rim * 2 ;
-		center = [ 0, 0]
+		center = [width / 2, height / 2]
 		stepNum = 0
 		const p = pen
 		let spiro = []
@@ -38,8 +38,8 @@
 			// console.log('spiro while', rA, gA, i)
 
 			spiro[i]=[
-				rRad * Math.sin(rA * d2r) + gRad * Math.sin(gA * d2r)*p,
-				rRad * Math.cos(rA * d2r) - gRad * Math.cos(gA * d2r)*p
+				center[0] + rRad * Math.sin(rA * d2r) + gRad * Math.sin(gA * d2r)*p,
+				center[1] + rRad * Math.cos(rA * d2r) - gRad * Math.cos(gA * d2r)*p
 			]
 			i++
 			rA = i * step;
@@ -57,6 +57,14 @@
 	}
 
 	$: calcSpiro(rT, gT, radius, p, step, center)
+
+
+	// TODO - update so that maxStepmum gets refreshed on recalculate
+	//		Update so that drawing works in either direction
+	//		Lazy loading of calculated spiro?
+	//		Leave spiros in place?
+	//			in calcspiro add dString to an array
+	//			
 
 	let maxStepNum = stepNum;
 	$: {
@@ -78,11 +86,7 @@
 				path: dString,
 				radius: radius,
 				gT: gT,
-				rT: rT,
-				p: p,
-				active: false,
-				editing: false
-
+				rT: rT
 			})
 			return arr
 		})
@@ -90,27 +94,24 @@
 	}
 </script>
 
-<svg viewbox={`${-width/2} ${-height/2} ${width} ${height}`} class="spirograph" width={width} height={height} shape-rendering="optimizeQuality" >
+<div class="button-container"><button on:click={saveSpiro}>Save</button></div>
+<svg class="spirograph" width={width} height={height}>
 	<path d={dString} />
-	<circle cX=0 cY=0 r=20 stroke="black" />
 	{#if spiroArray.length > 0}
-	{#each spiroArray as spiro}
-	<path d={spiro} />
-	{/each}
+		{#each spiroArray as spiro}
+			<path d={spiro} />
+		{/each}
 	{/if}
 	<!-- <circle cX={center[0]} cY={center[1]} r=3 stroke="black" /> -->
 	<!-- <path d={`M${center[0]-radius} ${center[1]} L${center[0]+radius} ${center[1]} M${center[0]} ${center[1]-radius} L${center[0]} ${center[1]+radius} `} stroke-width=".2"/> -->
 </svg>
 
-<div class="button-container"><button on:click={saveSpiro}>Save</button></div>
 
 <style>
 	.button-container{
 		position: absolute;
-		bottom: 0px;
-		left: 100%;
-		/* width: 75px;
-		height: 50px; */
+		width: 75px;
+		height: 50px;
 		background-color: red;
 		z-index: 10;
 	}
@@ -121,7 +122,7 @@
 		fill: none;
 		stroke: red;
 		stroke-width: 1;
-		/* border-radius: 50%; */
-		background: rgba(83, 116, 167, 0.2);
+		border-radius: 50%;
+		/* background: rgba(138, 18, 18, 0.2); */
 	}
 </style>

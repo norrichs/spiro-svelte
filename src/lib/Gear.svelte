@@ -46,10 +46,10 @@
 
 
 <svg  class="gear" class:hidden={gearHidden} width={width} height={height} style={"--gear-rotation: " + gRot + "deg;"}>
-	<path class="innergear" d={dString}  stroke-linejoin="round"/>
 	<!-- <circle cx={center[0]} cy={center[1]} r=2 fill="none" stroke="black" /> -->
-	<circle cx={center[0]} cy={center[1] - r * p} r=6  stroke="black"/>
-	<path d={`M${center[0]-10} ${center[1]} L${center[0]+10} ${center[1]} M${center[0]} ${center[1]-10} L${center[0]} ${center[1]+10} `} stroke-width="1"/>
+	<circle class="pen"cx={center[0]} cy={center[1] - r * p} r=6  stroke="black"/>
+	<path class="center-cross" d={`M${center[0]-10} ${center[1]} L${center[0]+10} ${center[1]} M${center[0]} ${center[1]-10} L${center[0]} ${center[1]+10} `} stroke-width="1"/>
+	<path class="innergear" d={dString}  stroke-linejoin="round"/>
 </svg>
 
 
