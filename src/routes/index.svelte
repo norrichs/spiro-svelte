@@ -136,7 +136,7 @@
 
 <section class="spiro" style={ 'width: '+(2 * (radius + rim))+'px; height: '+(2 * (radius + rim)) + 'px;'}>
 	<div class="graph-container">
-		<SpiroGraph {toothSize} {rT} {gT} {p} {radius} {ringA} {rim}/>
+		<SpiroGraph {rT} {gT} {p} {radius} {ringA} {rim}/>
 	</div>
 	<div class="ring-container" 
 		style={'--container-width:' + width + 'px;'} 
