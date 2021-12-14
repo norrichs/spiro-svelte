@@ -1,30 +1,31 @@
 <script>
-	import {spiroCollection} from '../lib/stores.js'
-	export let rim;
-	export let rT;
-	export let gT;
-	export let p;
-	export let radius;
-	export let ringA;
+	import {spiroCollection, sParams, sPathString} from '../lib/stores.js'
+	// export let rim;
+	// export let rT;
+	// export let gT;
+	// export let p;
+	// export let radius;
+	// export let ringA;
+
+
 
 	let step = 5;
 	let width, height, center; 
 	let stepNum = 0
-	let pointArray, lines, dString
+	let pointArray, lines
 	let spiroArray = []
 	let precision = 2
 
-	const calcSpiro = (rT, gT, r, pen, step, center) => {
+	const calcSpiro = (rT, gT, r, p, step, rim) => {
 		console.log('calcspiro')
-		spiroArray.push(dString)
+		spiroArray.push($sPathString)
 		spiroArray = spiroArray
 		stepNum = 0;
 		maxStepNum = stepNum;
-		width = radius * 2 + rim * 2 ;
-		height = radius * 2 + rim * 2 ;
+		width = r * 2 + rim * 2 ;
+		height = r * 2 + rim * 2 ;
 		center = [ 0, 0]
 		stepNum = 0
-		const p = pen
 		let spiro = []
 		const gRad = r * gT / rT  	// radius of gear
 		const rRad = r - gRad			// radius from center of ring to center of gear
@@ -50,48 +51,31 @@
 		lines = pointArray.map((p) => {
 			return `L${Number.parseFloat(p[0]).toFixed(precision)} ${Number.parseFloat(p[1]).toFixed(precision)} `;
 		});
-		dString = `M${pointArray[0][0]} ${pointArray[0][1]} L${pointArray[0][0]} ${pointArray[0][1]}` 
-		console.log('dString',dString)
+		$sPathString = `M${pointArray[0][0]} ${pointArray[0][1]} L${pointArray[0][0]} ${pointArray[0][1]}` 
+		console.log('path string',$sPathString)
 		// return spiro
 	
 	}
 
-	$: calcSpiro(rT, gT, radius, p, step, center)
+	$: calcSpiro($sParams.rT, $sParams.gT, $sParams.radius, $sParams.p, step, $sParams.rim)
 
 	let maxStepNum = stepNum;
 	$: {
-		stepNum = Math.floor(ringA / step);
+		stepNum = Math.floor($sParams.ringA / step);
 		// console.log('step',stepNum)
 		if(stepNum === maxStepNum+1){
-			dString += lines[stepNum]
+			$sPathString += lines[stepNum]
 			maxStepNum = stepNum
 		}else if(stepNum > maxStepNum + 1){
-			dString += lines.slice(maxStepNum, stepNum).join()
+			$sPathString += lines.slice(maxStepNum, stepNum).join()
 			maxStepNum = stepNum;
 		}
 	}
-	// let dString = + lines.join();
-	function saveSpiro(){
-		console.log('saving spiro', dString)
-		spiroCollection.update(arr => {
-			arr.push({
-				path: dString,
-				radius: radius,
-				gT: gT,
-				rT: rT,
-				p: p,
-				active: false,
-				editing: false
 
-			})
-			return arr
-		})
-		console.log('collection', $spiroCollection)
-	}
 </script>
 
 <svg viewbox={`${-width/2} ${-height/2} ${width} ${height}`} class="spirograph" width={width} height={height} shape-rendering="optimizeQuality" >
-	<path d={dString} />
+	<path d={$sPathString} />
 	<circle cX=0 cY=0 r=20 stroke="black" />
 	{#if spiroArray.length > 0}
 	{#each spiroArray as spiro}
@@ -102,18 +86,9 @@
 	<!-- <path d={`M${center[0]-radius} ${center[1]} L${center[0]+radius} ${center[1]} M${center[0]} ${center[1]-radius} L${center[0]} ${center[1]+radius} `} stroke-width=".2"/> -->
 </svg>
 
-<div class="button-container"><button on:click={saveSpiro}>Save</button></div>
+
 
 <style>
-	.button-container{
-		position: absolute;
-		bottom: 0px;
-		left: 100%;
-		/* width: 75px;
-		height: 50px; */
-		background-color: red;
-		z-index: 10;
-	}
 	.spirograph {
 		position: absolute;
 		top: 0;

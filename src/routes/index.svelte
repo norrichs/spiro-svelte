@@ -25,12 +25,16 @@
 	export const router = browser;
 	// export const prerender = false;
 
-	import {spiroCollection} from '../lib/stores.js'
+	import {spiroCollection, sParams, sPathString} from '../lib/stores.js'
 	import Ring from '../lib/Ring.svelte';
 	import Gear from '../lib/Gear.svelte';
 	import SpiroGraph from '../lib/SpiroGraph.svelte';
 	import ControlPanel from '../lib/ControlPanel.svelte'
 	import SpiroBrowser from '../lib/SpiroBrowser.svelte'
+
+
+
+
 
 	let rT = 100;
 	let gT = 51;
@@ -60,12 +64,12 @@
 		gRadius = radius * gT / rT;
 		rRadius = radius;
 		gRotOffset = ((rT - gT) % 2) * 360 / gT / 2
-		gRot = (ringA * rT) / gT - ringA + gRotOffset;
-		gX = (rRadius - gRadius) * Math.sin(ringA / r2d);
-		gY = (rRadius - gRadius) * Math.cos(ringA / r2d);
+		gRot = ($sParams.ringA * rT) / gT - $sParams.ringA + gRotOffset;
+		gX = (rRadius - gRadius) * Math.sin($sParams.ringA / r2d);
+		gY = (rRadius - gRadius) * Math.cos($sParams.ringA / r2d);
 		// console.log('gRadius, rRadius',gRadius, rRadius)
-		ringA = 0;
-		readouts.ringA = ringA
+		$sParams.ringA = 0;
+		readouts.ringA = $sParams.ringA
 		readouts.gX = gX
 		readouts.gY = gY
 		readouts.gRot = gRot
@@ -78,7 +82,7 @@
 	let gX; 
 	let gY; 
 	let ringX, ringY;
-	let ringA = 0;
+	// let ringA = 0;
 	let newRingA = 0;
 	let ringDeltaA = 0;
 	let movingGear = false;
@@ -98,18 +102,18 @@
 			} else if (ringY < 0) {
 				newRingA = 180 + Math.atan(ringX / ringY) * r2d;
 			}
-			ringDeltaA = ((newRingA + 360) % 360) - (((ringA % 360) + 360) % 360);
+			ringDeltaA = ((newRingA + 360) % 360) - ((($sParams.ringA % 360) + 360) % 360);
 			if (ringDeltaA > 350) {
 				ringDeltaA = ringDeltaA - 360;
 			} else if (ringDeltaA < -350) {
 				ringDeltaA = ringDeltaA + 360;
 			}
 
-			ringA += ringDeltaA;
+			$sParams.ringA += ringDeltaA;
 
-			gRot = (ringA * rT) / gT - ringA;
-			gX = (rRadius - gRadius) * Math.sin(ringA / r2d);
-			gY = (rRadius - gRadius) * Math.cos(ringA / r2d);
+			gRot = ($sParams.ringA * rT) / gT - $sParams.ringA;
+			gX = (rRadius - gRadius) * Math.sin($sParams.ringA / r2d);
+			gY = (rRadius - gRadius) * Math.cos($sParams.ringA / r2d);
 			// console.log('g, r', gRadius, rRadius, gX, gY)
 			
 		}
@@ -128,6 +132,24 @@
 		gX = (rRadius - gRadius) * Math.sin(gAngle / r2d); 
 		gY = (rRadius - gRadius) * Math.cos(gAngle / r2d); 
 	};
+
+	function saveSpiro(){
+		console.log('saving spiro', $sPathString)
+		spiroCollection.update(arr => {
+			arr.push({
+				path: $sPathString,
+				radius: $sParams.radius,
+				gT: $sParams.gT,
+				rT: $sParams.rT,
+				p: $sParams.p,
+				active: false,
+				editing: false
+
+			})
+			return arr
+		})
+		console.log('collection', $spiroCollection)
+	}
 </script>
 
 <svelte:head>
@@ -136,7 +158,7 @@
 
 <section class="spiro" style={ 'width: '+(2 * (radius + rim))+'px; height: '+(2 * (radius + rim)) + 'px;'}>
 	<div class="graph-container">
-		<SpiroGraph {rT} {gT} {p} {radius} {ringA} {rim}/>
+		<SpiroGraph />
 	</div>
 	<div class="ring-container" 
 		style={'--container-width:' + width + 'px;'} 
@@ -158,7 +180,10 @@
 	>
 		<Gear {gT} {rT} {p} {radius} {gRot} />
 	</div>
+	<button class="button" on:click={saveSpiro}>Save</button>
 </section>
+
+
 <section>
 	<ControlPanel bind:rT={rT} bind:gT={gT} bind:radius={radius} bind:rim={rim} bind:pen={pen} {readouts} />
 </section>
@@ -170,7 +195,7 @@
 		/* background-color: rgba(0,100,200,0.3); */
 		/* border: 10px solid black; */
 		/* width: var(--container-width); */
-		margin:0 0 0 50px;;
+		margin:0 0 0 50px;
 		padding: 0;
 		position: relative;
 	}
@@ -203,7 +228,13 @@
 		/* overflow: hidden; */
 		overflow: visible;
 	}
-
+	.button{
+		width: 100%;
+		height: 30px;
+		border: none;
+		background-color: darkgoldenrod;
+		margin: 30px 0;
+	}
 
 
 </style>
