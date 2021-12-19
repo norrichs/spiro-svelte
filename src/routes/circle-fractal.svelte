@@ -4,6 +4,7 @@
 	import RotatedCircles from '$lib/RotatedCircles.svelte';
 	import CircleFractal from '$lib/CircleFractal.svelte'
 	import CircleControls from '$lib/CircleControls.svelte'
+	import ColorPicker from '$lib/ColorPicker.svelte'
 	import {circleControls} from '$lib/stores.js'
 	
 	// Rotated Circles Parameter
@@ -53,9 +54,6 @@
 		<CircleFractal {cfSymmetry} {cfLevels} {cfSymmetryArray} {cfBaseStroke}/>
 		<div class="controls-container" class:showControls><CircleControls/></div>
 	</div>
-	
-		
-	
 </div>
 
 <style>
@@ -101,7 +99,7 @@
 		flex-shrink: none;
 		padding: 10px;
 		border-radius: 10px;
-		background-color: indigo;
+		/* background-color: rgb(19, 8, 27); */
 		position: relative;
 
 	}
@@ -123,6 +121,12 @@
 		justify-content: center;
 		gap: 30px;
 		padding: 30px;
+		/* background-color: red; */
+	}
+	@media (hover: none) and (pointer: coarse) {
+		.sacred-library{
+			/* background-color: black; */
+		}
 	}
 	.controls-container{
 		position: absolute;
@@ -131,11 +135,11 @@
 		transform: translate(-50%, -50%);
 		/* height: 300px; */
 		width: 100%;
-		/* border-radius: 50%; */
+		border-radius: 50%;
 		background-color: rgba(0,0,0,0.5);
 		display: grid;
 		place-items: center;
-		visibility: hidden;
+		visibility: visible;
 		opacity: 0;
 		border-radius: 10px;
 		transition: 300ms;

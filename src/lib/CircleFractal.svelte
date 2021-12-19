@@ -64,6 +64,15 @@
 
 	console.log('cf params', params);
 	console.log('circles', circles);
+	const getDecreasingStrokeWidth = (level, doDecrease) => {
+		if(doDecrease){
+			return $circleControls[1].value /
+						100 /
+						((((level + 1) / $circleControls[0].value) * (level + 1)) / $circleControls[0].value)
+		}else{
+			return $circleControls[1].value / 50
+		}
+	}
 
 </script>
 
@@ -76,16 +85,17 @@
 		
 	>
 		
-		{#each circles as c}
+		{#each circles.sort((a,b) => {
+			if(a.level < b.level) return 1
+			if(a.level > b.level) return -1
+			else return 0
+		}) as c}
 	
 			<circle
 				cX={c.x}
 				cY={c.y}
 				r={c.r}
-				stroke="goldenrod"
-				stroke-width={$circleControls[1].value /
-					100 /
-					((((c.level + 1) / $circleControls[0].value) * (c.level + 1)) / $circleControls[0].value)}
+				stroke-width={getDecreasingStrokeWidth(c.level, false)}
 			/>
 		{/each}
 	</svg>
@@ -105,7 +115,7 @@
 	} */
 	.svg-container{
 		position: relative;
-		background-color: brown;
+		background-color: hsl(43, 74%, 49%);
 		border-radius: 50%;
 	}
 	
@@ -119,6 +129,11 @@
 		height: 100%;
 		border-radius: 50%;
 		/* background-color: rgba(200,200,0,0.1); */
+	}
+	.sac-geo{
+		stroke: black;
+		/* stroke: rgba(0, 153, 255, 0.295); */
+		/* fill: rgba(0, 114, 19, 0.01); */
 	}
 
 </style>

@@ -1,5 +1,6 @@
 <script>
 	import { circleControls } from '$lib/stores.js';
+	import ColorPicker from './ColorPicker.svelte';
 	// Controls
 	//		TODO - create an array of control objects
 	// SVG based controls
@@ -208,7 +209,7 @@
 			);
 			console.log('current value', 'continuous value', newIntValue);
 			$circleControls[controlIndex].value = newIntValue;
-			
+
 			if ($circleControls[controlIndex].name === 'levels') {
 			const currentLevels = $circleControls.filter((c) => c.name === 'symmetry').length;
 			if (newIntValue > currentLevels) {
@@ -244,14 +245,18 @@
 	on:mouseup={(ev) => releaseControl(ev)}
 >
 	{#each $circleControls.filter((c) => c.position !== 0) as c, i}
-		<path d={getActiveControlPath(c)} class="svg-control-active" class:grabbed={c.grabbed} />
-		<path
-			d={getInactiveControlPath(c)}
-			class="svg-control-inactive"
-			id={'control-' + c.position}
-			on:mousedown={(ev) => grabControl(ev, c.position)}
-		/>
+		{#if c.name !== 'stroke'}
+			<path d={getActiveControlPath(c)} class="svg-control-active" class:grabbed={c.grabbed} />
+			<path
+				d={getInactiveControlPath(c)}
+				class="svg-control-inactive"
+				id={'control-' + c.position}
+				on:mousedown={(ev) => grabControl(ev, c.position)}
+			/>
+		{/if}
 	{/each}
+	<!-- <ColorPicker c={$circleControls[2]} /> -->
+	
 </svg>
 
 <style>
