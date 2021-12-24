@@ -1,7 +1,6 @@
 <script>
 	import { circleControls } from '$lib/stores.js';
-	import ColorPicker from '$lib/ColorPicker.svelte';
-	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
+	// import ColorPicker from '$lib/ColorPicker.svelte';
 	// Controls
 	//		TODO - create an array of control objects
 	// SVG based controls
@@ -260,10 +259,6 @@
 	.controls {
 		/* background-color: rgba(100, 148, 237, 0.5); */
 		border-radius: 50%;
-		/* position: absolute; */
-		/* top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%); */
 	}
 	.svg-control-active:focus {
 		fill: red;

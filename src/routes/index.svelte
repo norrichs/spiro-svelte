@@ -29,8 +29,8 @@
 	import Ring from '../lib/Ring.svelte';
 	import Gear from '../lib/Gear.svelte';
 	import SpiroGraph from '../lib/SpiroGraph.svelte';
-	import ControlPanel from '../lib/ControlPanel.svelte'
-	import SpiroBrowser from '../lib/SpiroBrowser.svelte'
+	import ControlPanel from '$lib/ControlPanel.svelte'
+	import SpiroBrowser from '$lib/SpiroBrowser.svelte'
 
 
 

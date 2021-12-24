@@ -1,11 +1,8 @@
 
 <script>
-	import RecursiveRightAngle from '$lib/RecursiveRightAngle.svelte'
-	import RotatedCircles from '$lib/RotatedCircles.svelte';
+
 	import CircleFractal from '$lib/CircleFractal.svelte'
 	import CircleControls from '$lib/CircleControls.svelte'
-	import ColorPicker from '$lib/ColorPicker.svelte'
-	import {circleControls} from '$lib/stores.js'
 	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
 	
 	// Rotated Circles Parameter
@@ -41,12 +38,7 @@
 </script>
 
 <div class='sacred-library'>
-	<!-- <div class="sample-container"><RecursiveRightAngle depth={5} /></div>
-	<div class="sample-container">
-		<div><input type="range" bind:value={circleCount} min=1 max=300/></div>
-		<RotatedCircles {circleCount}/>
-	</div> -->
-	<div class="sample-container"
+		<div class="sample-container"
 		on:focus
 		on:click={()=>{console.log('clicked CircleFractal')}}
 		on:mouseover={ev=>{console.log('CircleFractal mouseover'); showControls = true}}
@@ -62,36 +54,6 @@
 <OpenPdfButton />
 
 <style>
-	.range-container.line-weight{
-		background-color: rgba(0, 0, 200, 0.2);
-	}
-	.settings-container{
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100px;
-		background-color: rgba(0,0,0,0.3);
-		height: 100px;
-		border-radius: 10px 10px 0 0;
-		display: flex;
-		flex-direction: row;
-		align-items: flex-end;
-		opacity: 0.01;
-	}
-	.settings-container:hover{
-		opacity: 1;
-	}
-	.range-container{
-		width: 40px;
-		display: flex;
-		flex-direction: row;
-		background-color: rgba(100,0,0,.1);
-		transform: rotate(-90deg);
-	}
-	.range-container>input{
-		width: calc(100px - 1em); 
-		transform-origin: left;
-	}
 	.sample-container{
 		--major-dimension: min(80vh, 80vw);
 		/* min-width: calc( 50vh - 60px ); */
@@ -114,12 +76,8 @@
 		display: flex;
 
 		width: 100%;
-		/* visibility: hidden; */
+	}
 
-	}
-	.sample-container:focus>input{
-		visibility: visible;
-	}
 	.sacred-library{
 		display: flex;
 		flex-direction: row;
@@ -127,11 +85,6 @@
 		gap: 30px;
 		padding: 30px;
 		/* background-color: red; */
-	}
-	@media (hover: none) and (pointer: coarse) {
-		.sacred-library{
-			/* background-color: black; */
-		}
 	}
 	.controls-container{
 		position: absolute;

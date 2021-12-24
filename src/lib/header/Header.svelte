@@ -14,7 +14,6 @@
 		<ul>
 			<li class:active={$page.path === '/'}><a sveltekit:prefetch href="/">SpiroGraph</a></li>
 			<li class:active={$page.path === '/sandbox'}><a sveltekit:prefetch href="/sandbox">Composer</a></li>
-			<li class:active={$page.path === '/test-pdf'}><a sveltekit:prefetch href="/test-pdf">PDF</a></li>
 			<li class:active={$page.path === '/circle-fractal'}><a sveltekit:prefetch href="/circle-fractal">Circle Fractal</a></li>
 		</ul>
 		<svg viewBox="0 0 2 3" aria-hidden="true">

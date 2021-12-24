@@ -1,7 +1,5 @@
 <script>
 	import {circleControls} from '$lib/stores.js'
-	import OpenPDFButton from '$lib/OpenPdfButton.svelte'
-	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
 	import {circleFractalArray} from '$lib/stores.js'
 	
 	let r0 = 100;
@@ -112,19 +110,6 @@
 
 <style>
 
-	/* .svg-control-active.grabbed{
-		fill: red;
-	}
-	.svg-control-inactive{
-		fill: rgba(218, 165, 32, 0.2);
-	}
-	.svg-control-active{
-		fill: rgba(218, 165, 32, 0.8);
-	} */
-	.container{
-		width: 100%;
-		height: 100%;
-	}
 	.svg-container{
 		position: relative;
 		background-color: hsl(43, 74%, 49%);

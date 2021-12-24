@@ -1,5 +1,5 @@
 <script>
-	import pdfMake from 'pdfmake/build/pdfmake'
+	import pdfMake from 'pdfmake'
 	import {circleFractalArray} from '$lib/stores.js'
 
 	const createPDF = (svgString) => {
