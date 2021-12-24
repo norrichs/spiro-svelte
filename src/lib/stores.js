@@ -23,6 +23,7 @@ export const sPathString = writable('')
 
 export const spiroCollection = writable([])
 
+export const circleFractalArray = writable([])
 
 
 export const circleControls = writable([

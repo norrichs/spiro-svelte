@@ -1,6 +1,7 @@
 <script>
 	import { circleControls } from '$lib/stores.js';
-	import ColorPicker from './ColorPicker.svelte';
+	import ColorPicker from '$lib/ColorPicker.svelte';
+	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
 	// Controls
 	//		TODO - create an array of control objects
 	// SVG based controls
@@ -145,9 +146,9 @@
 						min: 1,
 						max: 12,
 						step: 1,
-						arc: $circleControls[$circleControls.length-1].arc,
-						position: $circleControls[$circleControls.length-1].position - 1,
-						width: $circleControls[$circleControls.length-1].width,
+						arc: $circleControls[$circleControls.length - 1].arc,
+						position: $circleControls[$circleControls.length - 1].position - 1,
+						width: $circleControls[$circleControls.length - 1].width,
 						grabbed: false
 					});
 				}
@@ -156,11 +157,8 @@
 					$circleControls.pop();
 				}
 			}
-			$circleControls = $circleControls
-			
+			$circleControls = $circleControls;
 		}
-
-
 	};
 
 	const releaseControl = (ev) => {
@@ -210,30 +208,30 @@
 			console.log('current value', 'continuous value', newIntValue);
 			$circleControls[controlIndex].value = newIntValue;
 
+			// Handle updating symmetry controls if levels changed
 			if ($circleControls[controlIndex].name === 'levels') {
-			const currentLevels = $circleControls.filter((c) => c.name === 'symmetry').length;
-			if (newIntValue > currentLevels) {
-				for (let i = 0; i < newIntValue - currentLevels; i++) {
-					$circleControls.push({
-						name: 'symmetry',
-						value: 2,
-						min: 1,
-						max: 12,
-						step: 1,
-						arc: $circleControls[$circleControls.length-1].arc,
-						position: $circleControls[$circleControls.length-1].position - 1,
-						width: $circleControls[$circleControls.length-1].width,
-						grabbed: false
-					});
+				const currentLevels = $circleControls.filter((c) => c.name === 'symmetry').length;
+				if (newIntValue > currentLevels) {
+					for (let i = 0; i < newIntValue - currentLevels; i++) {
+						$circleControls.push({
+							name: 'symmetry',
+							value: 2,
+							min: 1,
+							max: 24,
+							step: 1,
+							arc: $circleControls[$circleControls.length - 1].arc,
+							position: $circleControls[$circleControls.length - 1].position - 1,
+							width: $circleControls[$circleControls.length - 1].width,
+							grabbed: false
+						});
+					}
+				} else if (newIntValue < currentLevels) {
+					for (let i = 0; i < currentLevels - newIntValue; i++) {
+						$circleControls.pop();
+					}
 				}
-			} else if (newIntValue < currentLevels) {
-				for (let i = 0; i < currentLevels - newIntValue; i++) {
-					$circleControls.pop();
-				}
+				$circleControls = $circleControls;
 			}
-			$circleControls = $circleControls
-			
-		}
 		}
 	};
 </script>
@@ -256,7 +254,6 @@
 		{/if}
 	{/each}
 	<!-- <ColorPicker c={$circleControls[2]} /> -->
-	
 </svg>
 
 <style>

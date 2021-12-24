@@ -6,6 +6,7 @@
 	import CircleControls from '$lib/CircleControls.svelte'
 	import ColorPicker from '$lib/ColorPicker.svelte'
 	import {circleControls} from '$lib/stores.js'
+	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
 	
 	// Rotated Circles Parameter
 	let circleCount = 48
@@ -52,9 +53,13 @@
 		on:mouseleave={ev=>showControls = false}
 	>
 		<CircleFractal {cfSymmetry} {cfLevels} {cfSymmetryArray} {cfBaseStroke}/>
-		<div class="controls-container" class:showControls><CircleControls/></div>
+		<div class="controls-container" class:showControls>
+			<CircleControls/>
+			
+		</div>
 	</div>
 </div>
+<OpenPdfButton />
 
 <style>
 	.range-container.line-weight{

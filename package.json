@@ -24,6 +24,8 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "@lukeed/uuid": "^2.0.0",
-    "cookie": "^0.4.1"
+    "cookie": "^0.4.1",
+    "pdfkit": "^0.13.0",
+    "pdfmake": "^0.2.4"
   }
 }

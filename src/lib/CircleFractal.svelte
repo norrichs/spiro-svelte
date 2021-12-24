@@ -1,5 +1,8 @@
 <script>
 	import {circleControls} from '$lib/stores.js'
+	import OpenPDFButton from '$lib/OpenPdfButton.svelte'
+	import OpenPdfButton from '$lib/OpenPdfButton.svelte';
+	import {circleFractalArray} from '$lib/stores.js'
 	
 	let r0 = 100;
 	let params = {
@@ -57,6 +60,8 @@
 				level: c.level
 			};
 		});
+		// push circles to store
+		$circleFractalArray = circles
 		console.log('setParams circles', circles)
 	};
 
@@ -76,31 +81,34 @@
 
 </script>
 
-<div class="svg-container">
-	<svg
-		viewbox={`${-(r0 + 1)} ${-(r0 + 1)} ${r0 * 2 + 2} ${r0 * 2 + 2}`}
-		xmlns="http://www.w3.org/2000/svg"
-		class="sac-geo"
-		fill="none" 
-		
-	>
-		
-		{#each circles.sort((a,b) => {
-			if(a.level < b.level) return 1
-			if(a.level > b.level) return -1
-			else return 0
-		}) as c}
+
+	<div class="svg-container">
+		<svg
+			viewbox={`${-(r0 + 1)} ${-(r0 + 1)} ${r0 * 2 + 2} ${r0 * 2 + 2}`}
+			xmlns="http://www.w3.org/2000/svg"
+			class="sac-geo"
+			fill="none"
 	
-			<circle
-				cX={c.x}
-				cY={c.y}
-				r={c.r}
-				stroke-width={getDecreasingStrokeWidth(c.level, false)}
-			/>
-		{/each}
-	</svg>
+		>
 	
-</div>
+			{#each circles.sort((a,b) => {
+				if(a.level < b.level) return 1
+				if(a.level > b.level) return -1
+				else return 0
+			}) as c}
+	
+				<circle
+					cX={c.x}
+					cY={c.y}
+					r={c.r}
+					stroke-width={getDecreasingStrokeWidth(c.level, false)}
+				/>
+			{/each}
+		</svg>
+	
+	</div>
+	
+
 
 <style>
 
@@ -113,6 +121,10 @@
 	.svg-control-active{
 		fill: rgba(218, 165, 32, 0.8);
 	} */
+	.container{
+		width: 100%;
+		height: 100%;
+	}
 	.svg-container{
 		position: relative;
 		background-color: hsl(43, 74%, 49%);
