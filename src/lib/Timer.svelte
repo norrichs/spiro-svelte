@@ -1,9 +1,4 @@
 <script>
-import { RA0 } from 'pdfmake/src/standardPageSizes';
-
-	import { tick } from 'svelte';
-import { invalid_attribute_name_character } from 'svelte/internal';
-
 	let timerTime = 0.1;
 	const minorTick = [2, 20];
 	const majorTick = [4, 50];
