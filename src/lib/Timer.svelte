@@ -77,25 +77,24 @@
 
 	var changeTimer;
 	const smoothChange = (sign) => {
-		console.log('timer time', timerTime)
-		if(timerTime <= 60 && timerTime >= 0){
-			console.log('in conditional')
-			changeTimer = setInterval((sign)=>{
-				if(timerTime <= 60 && timerTime >= 0){
-					timerTime = timerTime + sign / 5
-				}else{
-					clearInterval(changeTimer)
-				}
-			}, 20, sign)
-		}else{
-			console.log('clear')
-			clearInterval(changeTimer)
-		}
-		console.log('other')
+		changeTimer = setInterval((sign)=>{
+			const newTime = timerTime + sign / 5;
+			if(newTime < 0) {
+				timerTime = 0
+				clearInterval(changeTimer)
+			}else if(newTime > 60) {
+				timerTime = 60
+				clearInterval(changeTimer)
+			}else{
+				timerTime = newTime
+			}
+		}, 20, sign)
 	}
 
 
 	console.log('ticks list', ticks);
+
+	window.addEventListener('contextmenu', (e) => {e.preventDefault();})
 </script>
 
 <div class="timer-container">
@@ -143,6 +142,7 @@
 			on:touchstart={()=>{smoothChange(1)}}
 			on:touchend={clearInterval(changeTimer)}
 			on:touchcancel={clearInterval(changeTimer)}
+			on:doubletouch|preventDefault
 		/>
 		<path d={`M0 ${-r * 1.9 / 5} A${r * 1.9 / 5} ${r * 1.9 / 5} 0 0 0 0 ${r * 1.9 / 5}` } 
 			class="knob-control"
@@ -150,7 +150,11 @@
 			on:mouseup={clearInterval(changeTimer)}
 			on:touchstart={()=>{smoothChange(-1)}}
 			on:touchend={clearInterval(changeTimer)}
-			on:touchcancel|preventDefault={clearInterval(changeTimer)}
+			on:touchcancel={(ev) => {
+				if(ev.cancelable) ev.preventDefault();
+				else console.log('not cancelable')
+				clearInterval(changeTimer)
+			}}
 		/>
 		<path 
 			d={`M${r*0.25*Math.cos(-Math.PI*2/6)} ${r*0.25*Math.sin(-Math.PI*2/6)} A${r*0.25} ${r*0.25} 0 0 1 ${r*0.25*Math.cos(0)} ${r*0.25*Math.sin(0)}`}
