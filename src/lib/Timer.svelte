@@ -138,17 +138,19 @@
 
 		<path d={`M0 ${-r * 1.9 / 5} A${r * 1.9 / 5} ${r * 1.9 / 5} 0 0 1 0 ${r * 1.9 / 5}` } 
 			class="knob-control"
-			on:mousedown={()=>{smoothChange(1)}}
+			on:mousedown|preventDefault={()=>{smoothChange(1)}}
 			on:mouseup={clearInterval(changeTimer)}
 			on:touchstart={()=>{smoothChange(1)}}
 			on:touchend={clearInterval(changeTimer)}
+			on:touchcancel={clearInterval(changeTimer)}
 		/>
 		<path d={`M0 ${-r * 1.9 / 5} A${r * 1.9 / 5} ${r * 1.9 / 5} 0 0 0 0 ${r * 1.9 / 5}` } 
 			class="knob-control"
-			on:mousedown={()=>{smoothChange(-1)}}
+			on:mousedown|preventDefault={()=>{smoothChange(-1)}}
 			on:mouseup={clearInterval(changeTimer)}
 			on:touchstart={()=>{smoothChange(-1)}}
 			on:touchend={clearInterval(changeTimer)}
+			on:touchcancel|preventDefault={clearInterval(changeTimer)}
 		/>
 		<path 
 			d={`M${r*0.25*Math.cos(-Math.PI*2/6)} ${r*0.25*Math.sin(-Math.PI*2/6)} A${r*0.25} ${r*0.25} 0 0 1 ${r*0.25*Math.cos(0)} ${r*0.25*Math.sin(0)}`}
@@ -193,7 +195,9 @@
 </div>
 <div>
 	<button on:click={countDownTimer}>Start Timer</button>
+	<input type="number" bind:value={timerTime} />
 </div>
+
 
 <style>
 	.face-layer{
